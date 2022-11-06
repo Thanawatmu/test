@@ -1,57 +1,34 @@
-const express = require('express')
-const app = express()
-const port = 3000
+const express = require('express');
+const path = require('path');
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-var path = require('path');
+app.use(express.static(__dirname));
 
-var visitors = 0;
-const fs = require('fs');
-
-// var bodyParser = require('body-parser')
-// // parse application/x-www-form-urlencoded
-// app.use(bodyParser.urlencoded({ extended: false }))
-// // parse application/json
-// app.use(bodyParser.json())
-
-
-const Users = require('./models/User');
-
-app.use(express.static(__dirname+ '/public'))
-
-
-
-app.get('/', (req, res) => {
-    visitors = visitors + 1
-    console.log('user visted homepage', visitors)
-
+app.use('/', function (req, res, next) {
 
     var options = {
         root: path.join(__dirname)
     };
     var fileName = 'index.html';
-    res.sendFile(fileName, options, function (err) {
+    res.sendFile(fileName, options, function (err) { 
         if (err) {
             next(err);
         } else {
             console.log('Sent:', fileName);
         }
     });
-})
+});
 
-var users = []
+app.listen(PORT, function (err) {
+    if (err) console.log(err);
+    console.log("Server listening on PORT", PORT);
+});
 
-fs.readFile('users.json', 'utf8', (err, jsonString) => {
-    const data = JSON.parse(jsonString)
-    users = data;
-})
-
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
-
-
-
-// const http = require('http');
+app.get('/', function (req, res) {
+    console.log("File Sent")
+    res.send();
+});http = require('http');
 
 // const hostname = '127.0.0.1';
 // const port = 3000;
@@ -63,5 +40,3 @@ app.listen(port, () => {
 // });
 
 // server.listen(port, hostname, () => {
-//   console.log(`Server running at http://${hostname}:${port}/`);
-// });
